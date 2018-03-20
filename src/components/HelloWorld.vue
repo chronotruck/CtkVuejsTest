@@ -4,12 +4,20 @@
     <div>
       {{employees}}
     </div>
+    <employees-list :employees="employees" @open-edit-user-form="editUser" @delete-employee="deleteUser"/>
+    <user-form :employee="employeeToEdit" v-if="employeeToEdit" @submit-user-form="initEmployeeToEdit"/>
   </div>
 </template>
 
 <script>
+import EmployeesList from './_subs/EmployeesList'
+import UserForm from './_subs/UserForm'
 export default {
   name: 'HelloWorld',
+  components: {
+    EmployeesList,
+    UserForm
+  },
   data () {
     return {
       msg: 'CtkVuejsTest',
@@ -22,7 +30,19 @@ export default {
         {id: 6, name: 'Jeremy', age: '35', sport: 'Danse'},
         {id: 7, name: 'Maxime', age: '26', sport: 'Football'},
         {id: 8, name: 'Matthieu', age: '30', sport: 'Football'}
-      ]
+      ],
+      employeeToEdit: null
+    }
+  },
+  methods: {
+    editUser (employee) {
+      this.employeeToEdit = employee
+    },
+    deleteUser (employee) {
+      this.employees = this.employees.filter((element) => { return element.id !== employee.id })
+    },
+    initEmployeeToEdit () {
+      this.employeeToEdit = null
     }
   }
 }
@@ -32,5 +52,9 @@ export default {
 <style scoped>
   h1, h2 {
     font-weight: normal;
+  }
+  .hello {
+    width: 80%;
+    margin: 0 auto;
   }
 </style>
